@@ -41,8 +41,14 @@ Copy it from the file `LampBotUIPage.html` provided by the instructor. Then clic
 * This code has been adapted from https://github.com/watson-developer-cloud/Node-RED-labs/tree/master/basic_examples/conversation. It provides a basic Web page as a front end to the chatbot. You may refer to the link for more detailed information about its exact functionality.
 
 ### D. Create Conversation chat bot flow
-* Create a second flow in the same flow, chaining an HTTP Input node, a function node, a Watson Conversation node, another function node and an HTTP response node as per below.![](images_Lab5/markdown-img-paste-20180610194320171.png)
+* Create a second flow in the same flow, chaining an HTTP Input node, a function node, a Watson Conversation node, another function node and an HTTP response node as per below.
+
+  ![1531223508858](assets/1531223508858.png)
+
 * Set the HTTP input node method to POST and its URL to /botchat
+
+* Edit the Conversation node. In the Workspace field, enter the WorkspaceID you saved earlier. You may need to generate credentials for the service to enter in the username and password fields.
+
 * Add the following code to the first function node:
 ``` javascript
 // stash away incoming data
@@ -64,7 +70,8 @@ msg.payload.botresponse = msg.mydata;
 return msg;
 ```
 * This implements a REST service to call the conversation with some context. We will modify it later in order to control the lamp as well. Those interested in more detail can find it in GitHub.
-* Finally, edit the Conversation node. In the Workspace field, enter the WorkspaceID you saved earlier. You may need to generate credentials for the service to enter in the username and password fields.
+
+  
 
 ### E. Test the sample conversation from Node-RED
 * Deploy the flow and open a separate tab in your browser pointing to the flow’s UI URL. Since you set the http input node’s URL to /lampbot, you will find the UI at https://streetlamp-xxx.mybluemix.net/lampbot.
@@ -72,12 +79,12 @@ return msg;
 
 ### F. Make the conversation actionable
 * We want the conversation to control the lamp. Since the sample conversation already has commands to set the state of lights, we will hook them up to our code that sends a command to the streetlamp.
-* Switch back to your Streetlight flow, and locate the IBM IoT output node used to send the intensity to the lamp (in the `Set Light` flow). From the palette, add two input link and two change nodes. Wire them to the IoT output node as shown:
+* Switch back to your Streetlight flow, and locate the IBM IoT output node used to send the intensity to the lamp (in the `Set RaspiLamp colors` node). From the palette, add two input link and two change nodes. Wire them to the IoT output node as shown:
 ![](images_Lab5/markdown-img-paste-20180612013229885.png)
 	 Edit the two link nodes and name them Lamp On and Lamp Off respectively. The Link nodes will carry information from the LampBot flow to this one.	
 * Edit the two Change nodes so that they set the msg.payload to numeric value 9 and 0 respectively: ![](images_Lab5/markdown-img-paste-20180610194811966.png)
 * Deploy the flow.
-* Return to the LampBot flow editor. Add a Switch node and wire it to the output of the Conversation node. We will interpret the value of the Conversation’s lightonoff context parameter to set the lamp value accordingly. 
+* Return to the LampBot flow editor. Add a Switch node and wire it to the output of the Conversation node. We will interpret the value of the Conversation’s lightonoff context parameter (contained in `msg.payload.context.lightonoff` ) to set the lamp value accordingly. 
 * Edit the switch node to add an additional output and trigger one when the value is the on string and the other when the value is the off string. This will create two outputs on the switch node. ![](images_Lab5/markdown-img-paste-20180610194951971.png)
 * Add two link output nodes, wire each one to an output of the switch node, then edit them and select the Lamp On and Lamp Off links from the Street Light Tab: 
 ![](images_Lab5/markdown-img-paste-2018061201374394.png)
@@ -95,7 +102,7 @@ We will use the conversation dialog to change the state of the streetlight
 2. Switch back to your IBM Cloud Services, locate the Conversation Service and launch the Conversation Tool. Edit the Car Dashboard sample.
 3. Once there, select the Entities tab. An entity definition includes a set of entity values that can be used to trigger different responses. Each entity value can have multiple synonyms, which define different ways that the same value might be specified in user input. There will be an @appliance entry, with a lights instance, that we will adjust so that it also understands lamp. 
  ![](images_Lab5/markdown-img-paste-20180610195228189.png)
-4. Click on `@appliance` and then click on lights. Click in the `Add synonyms` field and type `lamp`. Hit the return key to enter the value. ![](images_Lab5/markdown-img-paste-20180610195305296.png). You may want to add other synonyms such as `street lamp` ,`street light`, `lamp pole`
+4. Click on `@appliance` and then click on `lights`. Click in the `Add synonyms` field and type `lamp`. Hit the return key to enter the value. ![](images_Lab5/markdown-img-paste-20180610195305296.png). You may want to add other synonyms such as `street lamp` ,`street light`, `lamp pole`
 5. Switch back to the chatbot UI, and enter a sentence such as turn on lamp to verify that the new synonym for light is now understood. When a new element is added to the Conversation model, the Conversation takes some time to train itself to understand it. If the new term does not work immediately, take a break for a couple of minutes and try again.
 
 ### I. Adding functionality to the Conversation
