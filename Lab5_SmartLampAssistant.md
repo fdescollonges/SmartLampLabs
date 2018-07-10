@@ -12,7 +12,7 @@ Once the technical layers are in place, Watson Conversation is designed to be mo
 To easily use the Watson Assistant service from Node-RED, you will link an instance of the service to the application running Node-RED.
 
 * Navigate back to the IBM Cloud dashboard, and click the Create Resource button: ![](images_Lab5/markdown-img-paste-20180610192845419.png)
-* We will add a connection of an instance of the Watson Assistant service to our Node-RED instance. Click the “Create Ressource”  button as shown above, type Assistant in the Search field, and select the Watson Assistant tile:
+* We will add a connection of an instance of the  Watson Assistant service to our Node-RED instance. Click the “Create Ressource”  button as shown above, type Assistant in the Search field, and select the Watson Assistant tile:
 ![](images_Lab5/markdown-img-paste-20180612004552539.png)
 * Keep the defaults on the next page, and select Create ![](images_Lab5/markdown-img-paste-20180610193107932.png)
 * Once created, click the Connections tab on the left hand side, and then Create Connection: 
