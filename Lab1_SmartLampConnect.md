@@ -194,7 +194,7 @@ We will now modify the characteristics of the lamp connection in the Raspberry P
 
   Access your Raspberry Node-RED instance from your web browser on 1880 port i.e. `http://<<YOUR-IP-ADDRESS>>:1880/`
 
-* Select the `Watson IoT` tab. If you are more than one person working on the same lamp, duplicate the node `event` as many time as there are people working on your lamp. Each of these nodes will be configured for a different person (meaning a different Watson IoT Platform Instance). ![](images_Lab1/duplicate_iwotp_node.png). 
+* Select the `Watson IoT` tab. If you are more than one person working on the same lamp, duplicate the node `event` as many time as there are people working on your lamp. Each of these nodes will be configured for a different person (meaning a different Watson IoT Platform Instance). ![](images_Lab1/duplicate_wiotp_node.png)
 
   The following steps concerning the `event` node must be completed for each `event` node
 
