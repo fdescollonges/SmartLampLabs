@@ -229,7 +229,8 @@ then click on `Done`
   the line of the lamp must have a green dot on the left: ![](images_Lab1/markdown-img-paste-20180409000450612.png)
 
 * Selecting the `RaspiLampX` line the  `Recent Events` tab, we see the data arrive:
-* ![](images_Lab1/markdown-img-paste-20180409000622539.png)
+
+  ![](images_Lab1/markdown-img-paste-20180409000622539.png)
 
 ### Definition of a device data type
 Now that the sensor is plugged in, we will be able to introspect it to know its data format
