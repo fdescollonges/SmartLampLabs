@@ -10,7 +10,7 @@ These practical exercises are intended to illustrate how to integrate Artificial
 
 The idea of this optional lab is to use the camera of the device (in our case, the camera of the Raspberry Pi)  to detect event that will have an influence on the Smart Lamp. As a demo, we will change the color of the smart lamp leds when the camera detect a person.
 
- We will use a cloud service called Visual Recognition and the default  faces detection model.
+ We will use a cloud service called Visual Recognition and the default faces detection model.
 
 ![1524073135527](images_Lab6/1524073135527.png)
 
