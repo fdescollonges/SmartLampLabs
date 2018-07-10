@@ -12,7 +12,7 @@ Once the technical layers are in place, Watson Conversation is designed to be mo
 To easily use the Watson Assistant service from Node-RED, you will link an instance of the service to the application running Node-RED.
 
 * Navigate back to the IBM Cloud dashboard, and click the Create Resource button: ![](images_Lab5/markdown-img-paste-20180610192845419.png)
-* We will add a connection to an instance of the Watson Assistant service. Click the “Create Connection” button as shown above, type Assistant in the Search field, and select the Watson Assistant tile:
+* We will add a connection of an instance of the Watson Assistant service to our Node-RED instance. Click the “Create Ressource”  button as shown above, type Assistant in the Search field, and select the Watson Assistant tile:
 ![](images_Lab5/markdown-img-paste-20180612004552539.png)
 * Keep the defaults on the next page, and select Create ![](images_Lab5/markdown-img-paste-20180610193107932.png)
 * Once created, click the Connections tab on the left hand side, and then Create Connection: 
@@ -27,8 +27,9 @@ To get started with implementing a conversation, we will upload a prebuilt sampl
 * Switch back to the `manage` tab of your  Watson Assistant service, and click `[Launch Tool]` ![](images_Lab5/markdown-img-paste-20180610193523945.png)
 * Once on the tool page, select the `Workspaces` tab. Click on the import button ![](images_Lab5/markdown-img-paste-20180612010951257.png)
 * Select `Lab5_Car_Dashboard.json` to import ![](images_Lab5/markdown-img-paste-20180612011111424.png)
+* Click on Workspaces to return to the list of workspaces (top left)
 * Make a note of the WorkspaceID from the view details from the menu icon (top right) ![](images_Lab5/markdown-img-paste-20180612011418693.png)
-![](images_Lab5/markdown-img-paste-20180612011442679.png)
+  ![](images_Lab5/markdown-img-paste-20180612011442679.png)
 
 ### C. Set up the Web UI interface in Node-RED
 * Switch back to your IBM Cloud Node-RED flow editor page. Create a new flow tab, double-click it to open the settings, and name it LampBot.
@@ -73,7 +74,7 @@ return msg;
 * We want the conversation to control the lamp. Since the sample conversation already has commands to set the state of lights, we will hook them up to our code that sends a command to the streetlamp.
 * Switch back to your Streetlight flow, and locate the IBM IoT output node used to send the intensity to the lamp (in the `Set Light` flow). From the palette, add two input link and two change nodes. Wire them to the IoT output node as shown:
 ![](images_Lab5/markdown-img-paste-20180612013229885.png)
-* Edit the two link nodes and name them Lamp On and Lamp Off respectively. The Link nodes will carry information from the LampBot flow to this one.	
+	 Edit the two link nodes and name them Lamp On and Lamp Off respectively. The Link nodes will carry information from the LampBot flow to this one.	
 * Edit the two Change nodes so that they set the msg.payload to numeric value 9 and 0 respectively: ![](images_Lab5/markdown-img-paste-20180610194811966.png)
 * Deploy the flow.
 * Return to the LampBot flow editor. Add a Switch node and wire it to the output of the Conversation node. We will interpret the value of the Conversation’s lightonoff context parameter to set the lamp value accordingly. 
@@ -102,7 +103,7 @@ We will use the conversation dialog to change the state of the streetlight
 2. In the Conversation tool, switch to the Intents tab.  Intents are purposes or goals expressed in a user’s input, such as answering a question or processing a bill payment. By recognizing the intent expressed in a user’s input, the Conversation service can choose the correct dialog flow for responding to it.
 3. Locate the `#information_request` entry. Click on it and add the following user examples:
    *	What is the light output like?
-   *	What is the lamp value?
+   		What is the lamp value?
    *  How much is the street light output? 
 ![](images_Lab5/markdown-img-paste-20180610195411726.png)
 4. Click the back arrow and then switch to the Dialog tab. A dialog uses intents, entities, and context from your application to return a response to each user's input. We’ll add a response to return the state of the streetlight. Navigate to the node labelled `#information_request`. Expand it using the > and select the true box: ![](images_Lab5/markdown-img-paste-20180610195438700.png)
