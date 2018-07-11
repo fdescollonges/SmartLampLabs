@@ -1,11 +1,15 @@
-# Connected Streetlight
+---
+typora-copy-images-to: images_Lab5
+---
+
+# ![1524141676278](assets/1524141676278.png)Connected Streetlight
 
 ## Bringing cognitive capabilities to the streetlight Hands-on Lab
 This lab will show you how to enrich the application with cognitive capabilities that add a more natural and flexible way to interact with the lamp system.
 
-You will learn how to add a conversational interface to the street light application. The purpose and scope of Watson Conversation is to facilitate implementation of natural language interaction between man and machine. In this case, between you and the streetlight. You will trigger the functionality that you build in the previous labs through a text-based dialog with the streetlight.
+You will learn how to add a conversational interface to the street light application. The purpose and scope of Watson Assistant is to facilitate implementation of natural language interaction between man and machine. In this case, between you and the streetlight. You will trigger the functionality that you build in the previous labs through a text-based dialog with the streetlight.
 
-Once the technical layers are in place, Watson Conversation is designed to be modifiable by a power user with business skills rather than I/T personnel. For simplicity you will use Node-RED to build the technical layers, wiring Watson Conversation to actionable entities such as the lamp’s LED and sensors. The dialogue itself will be built using the Conversation building tool provided by IBM Cloud.
+Once the technical layers are in place, Watson Assistant is designed to be modifiable by a power user with business skills rather than I/T personnel. For simplicity you will use Node-RED to build the technical layers, wiring Watson Assistant to actionable entities such as the lamp’s LED and sensors. The dialogue itself will be built using the Watson Assistant building tool provided by IBM Cloud.
 
 ## A.	Setting up the technical layers
 ### 1.	Creating and binding the Watson Assistant (formerly Conversation) service
@@ -20,10 +24,10 @@ To easily use the Watson Assistant service from Node-RED, you will link an insta
 * Click the Connect button next to your Node-RED application:
 ![](images_Lab5/markdown-img-paste-20180612005106228.png)
 * You will be asked if you want to restage. Select Restage: ![](images_Lab5/markdown-img-paste-2018061200515400.png)
-Once restarted, the Conversation service will be available to your Node-RED instance.
+Once restarted, the Watson Assistant will be available to your Node-RED instance.
 
 ### B. Creating a test conversation from the sample
-To get started with implementing a conversation, we will upload a prebuilt sample Conversation which was originally designed to control operations of a car's equipment.
+To get started with implementing a conversation, we will upload a prebuilt sample conversation which was originally designed to control operations of a car's equipment.
 * Switch back to the `manage` tab of your  Watson Assistant service, and click `[Launch Tool]` ![](images_Lab5/markdown-img-paste-20180610193523945.png)
 * Once on the tool page, select the `Workspaces` tab. Click on the import button ![](images_Lab5/markdown-img-paste-20180612010951257.png)
 * Select `Lab5_Car_Dashboard.json` to import ![](images_Lab5/markdown-img-paste-20180612011111424.png)
@@ -40,16 +44,31 @@ To get started with implementing a conversation, we will upload a prebuilt sampl
 Copy it from the file `LampBotUIPage.html` provided by the instructor. Then click Done.
 * This code has been adapted from https://github.com/watson-developer-cloud/Node-RED-labs/tree/master/basic_examples/conversation. It provides a basic Web page as a front end to the chatbot. You may refer to the link for more detailed information about its exact functionality.
 
-### D. Create Conversation chat bot flow
-* Create a second flow in the same flow, chaining an HTTP Input node, a function node, a Watson Conversation node, another function node and an HTTP response node as per below.
+### D. Create conversation chat bot flow
+* We first need to add IBM Watson nodes to Raspi Node-RED instance to invoke easily IBM Watson services without having to deep dive into the API documentation.
+
+  To add Watson nodes (if not already done), go to `Manage Palette`
+
+  ![1524141676278](images_Lab5/1524141676278-1531348500827.png)
+
+  Select `Install` tab and enter `Node-Watson` in the search field, then `install` button on the right of th node-red-node-watson line.
+
+  ![1524142027375](images_Lab5/1524142027375-1531348556170.png)
+
+  
+
+* Now, create a second flow in the same flow, chaining an HTTP Input node, a function node, a Watson Assistant node, another function node and an HTTP response node as per below.
 
   ![1531223508858](assets/1531223508858.png)
 
 * Set the HTTP input node method to POST and its URL to /botchat
 
-* Edit the Conversation node. In the Workspace field, enter the WorkspaceID you saved earlier. You may need to generate credentials for the service to enter in the username and password fields.
+* Edit the WatsonAssistant node.
 
-* Add the following code to the first function node:
+  * In the Workspace field, enter the WorkspaceID you saved earlier. 
+  * You may need to generate credentials for the service to enter in the username and password fields.
+
+* Add the following code to the first function node (before Watson Assistant node), to prepare data to be sent to Watson Assistant service:
 ``` javascript
 // stash away incoming data
 msg.mydata = {};
@@ -60,7 +79,7 @@ msg.params = { "context": msg.req.body.context};
 
 return msg;
 ```
-* And this code to the second function node:
+* And this code to the second function node (after Watson Assistant node) to process data from Watson Assistant:
 ``` javascript
 msg.mydata.messageout = msg.payload;
 
@@ -84,7 +103,7 @@ return msg;
 	 Edit the two link nodes and name them Lamp On and Lamp Off respectively. The Link nodes will carry information from the LampBot flow to this one.	
 * Edit the two Change nodes so that they set the msg.payload to numeric value 9 and 0 respectively: ![](images_Lab5/markdown-img-paste-20180610194811966.png)
 * Deploy the flow.
-* Return to the LampBot flow editor. Add a Switch node and wire it to the output of the Conversation node. We will interpret the value of the Conversation’s lightonoff context parameter (contained in `msg.payload.context.lightonoff` ) to set the lamp value accordingly. 
+* Return to the LampBot flow editor. Add a Switch node and wire it to the output of the Watson Assistant node node. We will interpret the value of the Conversation’s lightonoff context parameter (contained in `msg.payload.context.lightonoff` ) to set the lamp value accordingly. 
 * Edit the switch node to add an additional output and trigger one when the value is the on string and the other when the value is the off string. This will create two outputs on the switch node. ![](images_Lab5/markdown-img-paste-20180610194951971.png)
 * Add two link output nodes, wire each one to an output of the switch node, then edit them and select the Lamp On and Lamp Off links from the Street Light Tab: 
 ![](images_Lab5/markdown-img-paste-2018061201374394.png)
@@ -98,8 +117,8 @@ We will use the conversation dialog to change the state of the streetlight
 2. The initial on/off status of the lamp stored in the Conversation context is not necessarily aligned with the initial physical state, so you may have to enter the first command twice to align them. Since the Streetlight flow receives updated status from the lamp, you could enhance the flow by storing the status in the global context (using e.g. a switch node) and using it to align context prior to calling the Conversation.
 
 ### H. Evolve the Conversation by adding more understanding
-1. You may have noticed that asking the LampBot to act on a ‘Lamp’ does not work. It currently only understands the term ‘Light’ because the sample was designed to control functions in a car. We will now complement the Conversation to add more understanding of urban fixtures.
-2. Switch back to your IBM Cloud Services, locate the Conversation Service and launch the Conversation Tool. Edit the Car Dashboard sample.
+1. You may have noticed that asking the LampBot to act on a ‘Lamp’ does not work. It currently only understands the term ‘Light’ because the sample was designed to control functions in a car. We will now complement the conversation to add more understanding of urban fixtures.
+2. Switch back to your IBM Cloud Services, locate the Watson Assistant Service and launch the Watson Assistant tool Tool. Edit the Car Dashboard sample.
 3. Once there, select the Entities tab. An entity definition includes a set of entity values that can be used to trigger different responses. Each entity value can have multiple synonyms, which define different ways that the same value might be specified in user input. There will be an @appliance entry, with a lights instance, that we will adjust so that it also understands lamp. 
  ![](images_Lab5/markdown-img-paste-20180610195228189.png)
 4. Click on `@appliance` and then click on `lights`. Click in the `Add synonyms` field and type `lamp`. Hit the return key to enter the value. ![](images_Lab5/markdown-img-paste-20180610195305296.png). You may want to add other synonyms such as `street lamp` ,`street light`, `lamp pole`
@@ -107,7 +126,7 @@ We will use the conversation dialog to change the state of the streetlight
 
 ### I. Adding functionality to the Conversation
 1. We will now modify the conversation so that it understands additional commands. The Conversation has a #information_request intent which currently works on time and date queries. We will extend it so that it can also reply with lamp readings.
-2. In the Conversation tool, switch to the Intents tab.  Intents are purposes or goals expressed in a user’s input, such as answering a question or processing a bill payment. By recognizing the intent expressed in a user’s input, the Conversation service can choose the correct dialog flow for responding to it.
+2. In the Conversation tool, switch to the Intents tab.  Intents are purposes or goals expressed in a user’s input, such as answering a question or processing a bill payment. By recognizing the intent expressed in a user’s input, the Watson Assistant service can choose the correct dialog flow for responding to it.
 3. Locate the `#information_request` entry. Click on it and add the following user examples:
    *	What is the light output like?
    		What is the lamp value?
