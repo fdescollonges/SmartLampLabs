@@ -2,7 +2,7 @@
 typora-copy-images-to: images_Lab5
 ---
 
-# ![1524141676278](assets/1524141676278.png)Connected Streetlight
+# Connected Streetlight
 
 ## Bringing cognitive capabilities to the streetlight Hands-on Lab
 This lab will show you how to enrich the application with cognitive capabilities that add a more natural and flexible way to interact with the lamp system.
@@ -45,21 +45,9 @@ Copy it from the file `LampBotUIPage.html` provided by the instructor. Then clic
 * This code has been adapted from https://github.com/watson-developer-cloud/Node-RED-labs/tree/master/basic_examples/conversation. It provides a basic Web page as a front end to the chatbot. You may refer to the link for more detailed information about its exact functionality.
 
 ### D. Create conversation chat bot flow
-* We first need to add IBM Watson nodes to Raspi Node-RED instance to invoke easily IBM Watson services without having to deep dive into the API documentation.
-
-  To add Watson nodes (if not already done), go to `Manage Palette`
-
-  ![1524141676278](images_Lab5/1524141676278-1531348500827.png)
-
-  Select `Install` tab and enter `Node-Watson` in the search field, then `install` button on the right of th node-red-node-watson line.
-
-  ![1524142027375](images_Lab5/1524142027375-1531348556170.png)
-
-  
-
 * Now, create a second flow in the same flow, chaining an HTTP Input node, a function node, a Watson Assistant node, another function node and an HTTP response node as per below.
 
-  ![1531223508858](assets/1531223508858.png)
+  ![1531223508858](images_Lab5/1531223508858.png)
 
 * Set the HTTP input node method to POST and its URL to /botchat
 
